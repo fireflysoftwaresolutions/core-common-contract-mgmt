@@ -63,7 +63,7 @@ public class ContractStatusHistoryServiceImpl implements ContractStatusHistorySe
     public Mono<ContractStatusHistoryDTO> updateContractStatusHistory(UUID contractStatusHistoryId, ContractStatusHistoryDTO contractStatusHistoryDTO) {
         return repository.findById(contractStatusHistoryId)
                 .switchIfEmpty(Mono.error(new RuntimeException("Contract status history not found with ID: " + contractStatusHistoryId)))
-                .flatMap(existingHistory -> ContractScope.requireSame(
+                .flatMap(existingHistory -> ContractScopeImpl.requireSame(
                                 contractStatusHistoryDTO.getContractId(), existingHistory.getContractId(), existingHistory,
                                 "Contract status history", contractStatusHistoryId)
                         .flatMap(owned -> {

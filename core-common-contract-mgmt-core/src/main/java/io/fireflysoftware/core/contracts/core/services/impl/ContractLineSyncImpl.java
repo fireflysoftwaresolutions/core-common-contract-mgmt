@@ -31,8 +31,8 @@ import java.util.UUID;
 /**
  * Keeps contract.product_id equal to the primary line, or the first line when none is primary.
  */
-@Component
-public class ContractLineSync {
+@Component("contractLineSync")
+public class ContractLineSyncImpl {
 
     @Autowired
     private ContractLineRepository lines;

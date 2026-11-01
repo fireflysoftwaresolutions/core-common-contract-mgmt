@@ -63,7 +63,7 @@ public class ContractEventServiceImpl implements ContractEventService {
     public Mono<ContractEventDTO> updateContractEvent(UUID contractEventId, ContractEventDTO contractEventDTO) {
         return repository.findById(contractEventId)
                 .switchIfEmpty(Mono.error(new RuntimeException("Contract event not found with ID: " + contractEventId)))
-                .flatMap(existingEvent -> ContractScope.requireSame(
+                .flatMap(existingEvent -> ContractScopeImpl.requireSame(
                                 contractEventDTO.getContractId(), existingEvent.getContractId(), existingEvent,
                                 "Contract event", contractEventId)
                         .flatMap(owned -> {

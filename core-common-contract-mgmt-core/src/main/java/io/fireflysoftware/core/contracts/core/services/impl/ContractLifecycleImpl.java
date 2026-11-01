@@ -28,7 +28,7 @@ import java.util.Set;
  * Allowed moves between the statuses already stored on a contract.
  * Terminal agreements stay on file; they are not rewritten back into a draft.
  */
-final class ContractLifecycle {
+final class ContractLifecycleImpl {
 
     private static final Map<ContractStatusEnum, Set<ContractStatusEnum>> ALLOWED = Map.of(
             ContractStatusEnum.DRAFT, EnumSet.of(
@@ -41,7 +41,7 @@ final class ContractLifecycle {
                     ContractStatusEnum.ACTIVE, ContractStatusEnum.TERMINATED)
     );
 
-    private ContractLifecycle() {
+    private ContractLifecycleImpl() {
     }
 
     static boolean canTransition(ContractStatusEnum from, ContractStatusEnum to) {

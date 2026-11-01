@@ -24,9 +24,9 @@ import java.util.UUID;
 /**
  * Stops a nested contract row from being moved onto a different agreement.
  */
-final class ContractScope {
+final class ContractScopeImpl {
 
-    private ContractScope() {
+    private ContractScopeImpl() {
     }
 
     static <T> Mono<T> requireSame(UUID requestedContractId, UUID actualContractId, T entity, String label, UUID entityId) {
