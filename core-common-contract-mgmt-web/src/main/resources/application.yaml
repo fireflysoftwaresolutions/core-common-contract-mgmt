@@ -71,3 +71,8 @@ logging:
     io.fireflysoftware: DEBUG
     org.springframework.r2dbc: DEBUG
     org.flywaydb: DEBUG
+
+firefly:
+  openapi:
+    instant-scalar:
+      enabled: true

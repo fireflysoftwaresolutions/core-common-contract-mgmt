@@ -110,6 +110,9 @@
                             <apiPackage>io.fireflysoftware.core.contract.sdk.api</apiPackage>
                             <modelPackage>io.fireflysoftware.core.contract.sdk.model</modelPackage>
                             <invokerPackage>io.fireflysoftware.core.contract.sdk.invoker</invokerPackage>
+                            <schemaMappings>
+                                <schemaMapping>FireflyInstant=java.time.Instant</schemaMapping>
+                            </schemaMappings>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                             <configOptions>
