@@ -21,6 +21,7 @@ import org.fireflyframework.core.filters.FilterRequest;
 import org.fireflyframework.core.queries.PaginationResponse;
 import io.fireflysoftware.core.contracts.core.services.ContractPartyService;
 import io.fireflysoftware.core.contracts.interfaces.dtos.ContractPartyDTO;
+import io.fireflysoftware.core.contracts.web.read.AuthenticatedContractReadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,27 +45,25 @@ import java.util.UUID;
 public class ContractPartyController {
 
     private final ContractPartyService contractPartyService;
+    private final AuthenticatedContractReadService authenticatedReads;
 
     @Operation(summary = "Filter contract parties", description = "Returns a paginated list of contract parties based on filter criteria")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved contract parties",
-                content = @Content(mediaType = "application/json", 
-                schema = @Schema(implementation = PaginationResponse.class))),
+                useReturnTypeSchema = true),
         @ApiResponse(responseCode = "400", description = "Invalid filter criteria provided", 
                 content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error", 
                 content = @Content)
     })
+    @org.fireflyframework.web.idempotency.annotation.DisableIdempotency
+    @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "contractReadBearer")
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mono<PaginationResponse<ContractPartyDTO>>> filterContractParties(
             @Parameter(description = "ID of the contract", required = true)
             @PathVariable UUID contractId,
             @Valid @RequestBody FilterRequest<ContractPartyDTO> filterRequest) {
-        if (filterRequest.getFilters() == null) {
-            filterRequest.setFilters(new ContractPartyDTO());
-        }
-        filterRequest.getFilters().setContractId(contractId);
-        return ResponseEntity.ok(contractPartyService.filterContractParties(filterRequest));
+        return ResponseEntity.ok(authenticatedReads.parties(contractId, filterRequest));
     }
 
     @Operation(summary = "Create a new contract party", description = "Creates a new contract party with the provided information")

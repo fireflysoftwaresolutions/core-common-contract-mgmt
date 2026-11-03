@@ -49,7 +49,7 @@ public class ContractLineServiceImpl implements ContractLineService {
     private ContractLineMapper mapper;
 
     @Autowired
-    private ContractLineSync sync;
+    private ContractLineSyncImpl sync;
 
     @Override
     public Mono<PaginationResponse<ContractLineDTO>> filterContractLines(FilterRequest<ContractLineDTO> filterRequest) {
@@ -89,7 +89,7 @@ public class ContractLineServiceImpl implements ContractLineService {
         }
         return lines.findById(contractLineId)
                 .switchIfEmpty(Mono.error(new RuntimeException("Contract line not found with ID: " + contractLineId)))
-                .flatMap(existing -> ContractScope.requireSame(
+                .flatMap(existing -> ContractScopeImpl.requireSame(
                                 dto.getContractId(), existing.getContractId(), existing, "Contract line", contractLineId)
                         .flatMap(owned -> lines.findByContractId(owned.getContractId()).collectList()
                                 .flatMap(existingLines -> {

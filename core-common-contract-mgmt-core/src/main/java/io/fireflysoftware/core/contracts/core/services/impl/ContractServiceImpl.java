@@ -51,7 +51,7 @@ public class ContractServiceImpl implements ContractService {
     private ContractStatusHistoryRepository statusHistoryRepository;
 
     @Autowired
-    private ContractLineSync lineSync;
+    private ContractLineSyncImpl lineSync;
 
     @Override
     public Mono<PaginationResponse<ContractDTO>> filterContracts(FilterRequest<ContractDTO> filterRequest) {
@@ -92,7 +92,7 @@ public class ContractServiceImpl implements ContractService {
                         updatedContract.setContractStatus(current);
                     }
                     if (updatedContract.getContractStatus() != current
-                            && !ContractLifecycle.canTransition(current, updatedContract.getContractStatus())) {
+                            && !ContractLifecycleImpl.canTransition(current, updatedContract.getContractStatus())) {
                         return Mono.error(new RuntimeException(
                                 "Contract " + contractId + " cannot move from " + current
                                         + " to " + updatedContract.getContractStatus()));
@@ -156,7 +156,7 @@ public class ContractServiceImpl implements ContractService {
         LocalDateTime now = LocalDateTime.now();
         ContractStatusHistory next = ContractStatusHistory.builder()
                 .contractId(contract.getContractId())
-                .statusCode(ContractLifecycle.historyCode(contract.getContractStatus()))
+                .statusCode(ContractLifecycleImpl.historyCode(contract.getContractStatus()))
                 .statusStartDate(now)
                 .build();
         return statusHistoryRepository.findByContractIdAndStatusEndDateIsNull(contract.getContractId())

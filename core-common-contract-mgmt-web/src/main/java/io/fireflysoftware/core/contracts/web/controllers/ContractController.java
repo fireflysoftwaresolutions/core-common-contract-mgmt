@@ -21,6 +21,7 @@ import org.fireflyframework.core.filters.FilterRequest;
 import org.fireflyframework.core.queries.PaginationResponse;
 import io.fireflysoftware.core.contracts.core.services.ContractService;
 import io.fireflysoftware.core.contracts.interfaces.dtos.ContractDTO;
+import io.fireflysoftware.core.contracts.web.read.AuthenticatedContractReadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,10 +41,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/contracts")
 @Tag(name = "Contracts", description = "API for managing contracts")
+@io.swagger.v3.oas.annotations.security.SecurityScheme(name = "contractReadBearer",
+        type = io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP,
+        scheme = "bearer", bearerFormat = "JWT")
 @RequiredArgsConstructor
 public class ContractController {
 
     private final ContractService contractService;
+    private final AuthenticatedContractReadService authenticatedReads;
 
     @Operation(summary = "Filter contracts", description = "Returns a paginated list of contracts based on filter criteria")
     @ApiResponses(value = {
@@ -88,11 +93,12 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error", 
                 content = @Content)
     })
+    @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "contractReadBearer")
     @GetMapping(value = "/{contractId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mono<ContractDTO>> getContractById(
             @Parameter(description = "ID of the contract to retrieve", required = true)
             @PathVariable UUID contractId) {
-        return ResponseEntity.ok(contractService.getContractById(contractId));
+        return ResponseEntity.ok(authenticatedReads.contract(contractId));
     }
 
     @Operation(summary = "Update contract", description = "Updates an existing contract with the provided information")

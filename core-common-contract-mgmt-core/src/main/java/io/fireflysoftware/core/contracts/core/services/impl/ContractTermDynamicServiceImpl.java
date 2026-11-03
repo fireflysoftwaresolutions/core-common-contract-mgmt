@@ -66,7 +66,7 @@ public class ContractTermDynamicServiceImpl implements ContractTermDynamicServic
     public Mono<ContractTermDynamicDTO> updateContractTermDynamic(UUID termId, ContractTermDynamicDTO contractTermDynamicDTO) {
         return repository.findById(termId)
                 .switchIfEmpty(Mono.error(new RuntimeException("Contract term dynamic not found with ID: " + termId)))
-                .flatMap(existingTerm -> ContractScope.requireSame(
+                .flatMap(existingTerm -> ContractScopeImpl.requireSame(
                                 contractTermDynamicDTO.getContractId(), existingTerm.getContractId(), existingTerm,
                                 "Contract term", termId)
                         .flatMap(owned -> {

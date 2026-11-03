@@ -59,7 +59,7 @@ class ContractServiceImplTest {
     private ContractStatusHistoryRepository statusHistoryRepository;
 
     @Mock
-    private ContractLineSync lineSync;
+    private ContractLineSyncImpl lineSync;
 
     @InjectMocks
     private ContractServiceImpl service;
