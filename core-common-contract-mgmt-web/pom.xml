@@ -38,6 +38,11 @@
 
         <dependency>
             <groupId>org.fireflyframework</groupId>
+            <artifactId>fireflyframework-cache-postgres</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.fireflyframework</groupId>
             <artifactId>fireflyframework-security-resource-server</artifactId>
         </dependency>
         <dependency>
@@ -81,7 +86,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!-- Testing -->
